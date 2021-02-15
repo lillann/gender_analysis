@@ -1,0 +1,104 @@
+---
+title: "Parsing of theses from pdf/docx into text"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(pdftools)
+library(tesseract)
+library(tools)
+
+path_to_files = "/Users/annl/Desktop/GenieProjekt/Exjobb"
+path_to_docs  = paste(path_to_files,"documents", sep="/")
+path_to_texts = paste(path_to_files,"texts", sep="/")
+
+files <- list.files(path=path_to_docs,recursive=TRUE, include.dirs=FALSE, full.names = TRUE)
+
+pdf2text <- function(file) {
+
+  parentdir = basename(dirname(file))
+  filename  = paste(file_path_sans_ext(basename(file)),"txt",sep=".")
+  outfile = file.path(path_to_texts, parentdir, filename)
+  
+  if (file_ext(file) == "pdf") {
+
+  out <- 
+    tryCatch(
+    {
+      pdf_length(file) # fails if file is corrupt
+      pdf_text(file)
+    },
+    error=function(cond) {
+      
+      {tryCatch({
+      pages     <- pdf_ocr_text(file, dpi=100, language="swe")
+      out       <- paste(pages, collapse = '\n')  
+      dir.create(file.path(path_to_texts, parentdir))
+ 
+      file.create(outfile)
+      fileConn<-file(outfile)
+      writeLines(out, fileConn)
+      close(fileConn)  
+      },
+      error = function(cond) { 
+        out <- ""
+        write(file,file="corrupted.txt",append=TRUE)  }
+      )}  
+
+    }
+    )
+   }
+  else if (file_ext(file) == "docx") {
+     out <- tryCatch(
+       {
+       read_docx(file)
+       },
+    error=function(cond) {
+     
+      write(file,file="corrupted.txt",append=TRUE)
+
+    }
+    )
+  }
+  
+  else if (file_ext(file) == "doc") {
+    
+     out <- tryCatch(
+       {
+       read_doc(file)
+       },
+    error=function(cond) {
+     
+      write(file,file="corrupted.txt",append=TRUE)
+
+    }
+    )
+  }
+  
+  else { 
+     
+     out <- ""
+     {write(file,file="corrupted.txt",append=TRUE)} 
+   }
+  
+  dir.create(file.path(path_to_texts, parentdir))
+ 
+  file.create(outfile)
+  fileConn<-file(outfile)
+  tryCatch({
+  writeLines(out, fileConn)},
+  error=function(cond){write(file,file="corrupted.txt",append=TRUE)})
+  close(fileConn)
+}
+
+```
+
+```{r}
+
+a <- lapply(files,pdf2text)
+
+```
