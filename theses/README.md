@@ -52,7 +52,7 @@ In this notebook, we train two logistic regression models on gender and on topic
 Furthermore, we identify the features with high topic correlation, and create reduced feature sets where features are dropped if their corresponding coefficient in the logistic regression model trained on topics has a coefficient that is higher than some threshold.
 We plot the accuracies of the models trained on the reduced feature sets, which show show a faster decline in accuracy for topic than for gender.
 
-```Exjobb_process_data.ipynb```
+```Exjobb_process_data.ipynb``` (no longer used)
 
 This code is no longer needed, as the inferred author gender and language has been added to the metadata files, and the texts are read from the pos-tagged data using the script in ```compute_frequencies.py```.
 
@@ -62,4 +62,6 @@ Generate tables listing the number of male/female/unknown authors in English and
 
 Generates two csv-files, one for Chalmers and one for GU, containing the fetched texts of each thesis, inferred author gender and language. 
 
+```parse_theses.Rmd``` 
 
+Code for parsing theses from pdf and docx format (no longer used)
