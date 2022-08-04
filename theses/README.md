@@ -20,7 +20,7 @@ English and Swedish theses are downsampled separately, and the resulting dataset
 Reads from the meta data files ```/data/Examensarbeten/GU-metadata-210310.json``` and ```/data/Examensarbeten/GU-metadata-210310.json```.
 
 \
-```compute_frequencies.py``` -  This script precomputes the frequencies of part-of-speach ngrams and function words of a given set of master theses.
+```compute_frequencies.py``` -  This script precomputes the frequencies of part-of-speech ngrams and function words of a given set of master theses.
 It produces a csv-file with one row for each document, where the first column contains the identifier of the document, and the remaining columns represent the frequencies of all pos-tag unigrams, the 100 most common pos-tag bigrams, the 500 most common pos-tag trigrams, and the 200 most common tokens (function words) and pronouns. The following variables need to be specified (in the code):
 -    ```included_documents``` specifies the csv-file that lists the master theses to include (for example the csv-files produced by Exjobb_downsample.ipynb), with the required column "id" with the identifiers of the theses.
 -    ```file_path``` specifies where to find the files that contain the pos-tagged texts (available at ```/data/Examensarbeten/sparv/exjobb-en/export/csv```).
